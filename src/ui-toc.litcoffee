@@ -9,6 +9,13 @@ Layout with converted markdown
 
 ##Methods
 
+      updateTocLinks: (querySelectorRoot) ->
+        @tocLinks = []
+        elements = querySelectorRoot.querySelectorAll @selectors
+        for element in elements
+          boundingRect = element.getBoundingClientRect()
+          @tocLinks.push {'textContent':element.textContent, 'scrollToY':boundingRect.top}
+
       linkClick: (event) ->
         window.scrollTo 0, event.target.getAttribute('scroll-to-y')
 
@@ -22,8 +29,9 @@ Layout with converted markdown
 
 ##Polymer Lifecycle
 
+      # Object type hints
       created: () ->
-        @tocLinks = [] # hint that tocLinks is an array
+        @tocLinks = []
         @selectors = ['h1', 'h2', 'h3']
         @container = 'body'
 
@@ -34,7 +42,11 @@ Layout with converted markdown
         else
           querySelectorRoot = document
 
-        elements = querySelectorRoot.querySelectorAll @selectors
-        for element in elements
-          boundingRect = element.getBoundingClientRect()
-          @tocLinks.push {'textContent':element.textContent, 'scrollToY':boundingRect.top}
+        @updateTocLinks querySelectorRoot
+
+        # Add Mutation Observer for Page Updates
+        observer = new MutationObserver (mutations) =>
+          @updateTocLinks querySelectorRoot
+        target = document
+        config = { subtree: true, childList: true, characterData: true }
+        observer.observe(target, config)
