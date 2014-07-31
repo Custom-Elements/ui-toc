@@ -1,7 +1,6 @@
 <polymer-element name="ui-toc" attributes="urls">
   <template>
     <ul id="toc">
-      {{tocLinks}}
       <template repeat="{{link in tocLinks}}">
         <li scroll-to-y={{link.scrollToY}} on-click={{linkClick}}>{{link.textContent}}</li>
       </template>
