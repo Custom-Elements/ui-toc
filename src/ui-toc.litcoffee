@@ -24,11 +24,10 @@ Layout with converted markdown
 
       created: () ->
         @tocLinks = [] # hint that tocLinks is an array
-
-      ready: () ->
-
         @selectors = ['h1', 'h2', 'h3']
         @container = 'body'
+
+      ready: () ->
 
         if @container
           querySelectorRoot = document.querySelector @container
