@@ -1,9 +1,11 @@
-<link rel="import" href="../lib/core-xhr.html">
 <polymer-element name="ui-toc" attributes="urls">
   <template>
-
-    <!-- converted content -->
-    <convertedContent id="el"></convertedContent>
+    <ul id="toc">
+      {{tocLinks}}
+      <template repeat="{{link in tocLinks}}">
+        <li scroll-to-y={{link.scrollToY}} on-click={{linkClick}}>{{link.textContent}}</li>
+      </template>
+    </ul>
 
   </template>
   <script src="./ui-toc.litcoffee"></script>

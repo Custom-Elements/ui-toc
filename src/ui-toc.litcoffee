@@ -9,16 +9,8 @@ Layout with converted markdown
 
 ##Methods
 
-      getHostDocument: (element) ->
-        if element is null
-          return null
-        else if element.nodeName is "#document"
-          return element
-        else if element.nodeName is "#document-fragment"
-          return element.host
-        else
-          return @getHostDocument element.parentNode
-
+      linkClick: (event) ->
+        window.scrollTo 0, event.target.getAttribute('scroll-to-y')
 
       bindEvent: (element, type, handler) ->
         if element.addEventListener
@@ -30,43 +22,20 @@ Layout with converted markdown
 
 ##Polymer Lifecycle
 
+      created: () ->
+        @tocLinks = [] # hint that tocLinks is an array
+
       ready: () ->
 
-        prefix = 'ui-toc'
-        selectors = ['h1', 'h2', 'h3']
-        container = 'body'
+        @selectors = ['h1', 'h2', 'h3']
+        @container = 'body'
 
-        hostDocument = @getHostDocument @
-        if container
-          container = hostDocument.querySelector container
-          tocLinks = container.querySelectorAll selectors
+        if @container
+          querySelectorRoot = document.querySelector @container
         else
-          tocLinks = hostDocument.querySelectorAll selectors
+          querySelectorRoot = document
 
-        # Generate the TOC Link
-        toc = '<ul id="toc">'
-        for link, i in tocLinks
-
-          # Check if An ID is Already Defined
-          #if !link.getAttribute 'id'
-          anchorName = prefix + "-" + link.nodeName + "-" + i
-          #  link.setAttribute 'id', anchorName
-
-          # Build the TOC Item
-          toc += '<li>'
-          toc += '<a href="#'+anchorName+'">'
-          toc += link.textContent
-          toc += '</a>'
-          toc += '</li>'
-
-        toc += '</ul>'
-
-        # Append the TOC
-        @$.el.innerHTML += toc
-
-        # Bind Events
-        tocLinks = @$.el.querySelectorAll 'li'
-        for link in tocLinks
-          @bindEvent link,'click', () ->
-            boundingRect = link.getBoundingClientRect()
-            window.scrollTo 0, boundingRect.top
+        elements = querySelectorRoot.querySelectorAll @selectors
+        for element in elements
+          boundingRect = element.getBoundingClientRect()
+          @tocLinks.push {'textContent':element.textContent, 'scrollToY':boundingRect.top}
