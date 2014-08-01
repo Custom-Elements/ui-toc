@@ -1,29 +1,44 @@
-#ui-markdown-layout
-Layout with converted markdown
+#ui-toc-layout
+Creates a header
 
     Polymer 'ui-toc',
 
 ##Events
+Scroll to the referenced section
+
+      linkClickInitializer: (element) ->
+        linkClick: (event) ->
+          boundingRect = element.getBoundingClientRect()
+          window.scrollTo 0, boundingRect.top
 
 ##Attributes and Change Handlers
 
 ##Methods
 
-      updateTocLinks: (querySelectorRoot) ->
+      updateTocLinks: () ->
         @tocLinks = []
-        elements = querySelectorRoot.querySelectorAll @selectors
+        elements = @querySelectorRoot.querySelectorAll @selectors
         for element in elements
-          boundingRect = element.getBoundingClientRect()
-          @tocLinks.push {'textContent':element.textContent, 'scrollToY':boundingRect.top}
 
-      linkClick: (event) ->
-        window.scrollTo 0, event.target.getAttribute('scroll-to-y')
+          for selector, i in @selectors
+            selectorIndex = if selector is element.nodeName then i
+
+          linkClick = @linkClickInitializer(element)
+
+          tocLink =
+            sourceNodeName: element.nodeName
+            selectorIndex: selectorIndex
+            textContent: element.textContent
+            linkClick: linkClick
+
+          @tocLinks.push tocLink
+
+
 
 ##Event Handlers
 
 ##Polymer Lifecycle
 
-      # Object type hints
       created: () ->
         @tocLinks = []
         @selectors = ['h1', 'h2', 'h3']
@@ -31,16 +46,13 @@ Layout with converted markdown
 
       ready: () ->
 
-        if @container
-          querySelectorRoot = document.querySelector @container
-        else
-          querySelectorRoot = document
+        @querySelectorRoot = if @container then document.querySelector @container else document
 
-        @updateTocLinks querySelectorRoot
+        @updateTocLinks @querySelectorRoot
 
         # Add Mutation Observer for Page Updates
         observer = new MutationObserver (mutations) =>
-          @updateTocLinks querySelectorRoot
-        target = document
+          @updateTocLinks @querySelectorRoot
+        target = @querySelectorRoot
         config = { subtree: true, childList: true, characterData: true }
         observer.observe(target, config)
