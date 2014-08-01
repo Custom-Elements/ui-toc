@@ -2,7 +2,7 @@
   <template>
     <ul id="toc">
       <template repeat="{{link in tocLinks}}">
-        <li data-source-node-name={{link.sourceNodeName}} data-selector-index={{link.selectorIndex}} data-source-node-hash={{link.sourceNodeHash}} on-click={{link.linkClick}}>{{link.textContent}}</li>
+        <li data-source-node-name={{link.sourceNodeName}} data-selector-index={{link.selectorIndex}} data-source-node-hash={{link.sourceNodeHash}} on-click={{linkClick}}>{{link.textContent}}</li>
       </template>
     </ul>
 

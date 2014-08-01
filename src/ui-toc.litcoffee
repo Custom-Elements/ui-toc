@@ -6,10 +6,11 @@ Creates a header
 ##Events
 Scroll to the referenced section
 
-      linkClickInitializer: (element) ->
-        linkClick: (event) ->
-          boundingRect = element.getBoundingClientRect()
-          window.scrollTo 0, boundingRect.top
+      linkClick: (event) ->
+        hash = event.target.getAttribute('data-source-node-hash')
+        element = @querySelectorRoot.querySelector '.'+hash
+        boundingRect = element.getBoundingClientRect()
+        window.scrollTo 0, boundingRect.top
 
 ##Attributes and Change Handlers
 
@@ -23,13 +24,13 @@ Scroll to the referenced section
           for selector, i in @selectors
             selectorIndex = if selector is element.nodeName then i
 
-          linkClick = @linkClickInitializer(element)
-
           tocLink =
+            sourceNodeHash: 'ui-toc-'+Math.random().toString().substr(2)
             sourceNodeName: element.nodeName
             selectorIndex: selectorIndex
             textContent: element.textContent
-            linkClick: linkClick
+
+          element.classList.add tocLink.sourceNodeHash
 
           @tocLinks.push tocLink
 
