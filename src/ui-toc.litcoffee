@@ -19,12 +19,6 @@ Layout with converted markdown
       linkClick: (event) ->
         window.scrollTo 0, event.target.getAttribute('scroll-to-y')
 
-      bindEvent: (element, type, handler) ->
-        if element.addEventListener
-          element.addEventListener type, handler, false
-        else
-          element.attachEvent 'on'+type, handler
-
 ##Event Handlers
 
 ##Polymer Lifecycle
