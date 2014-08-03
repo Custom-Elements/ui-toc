@@ -1,10 +1,16 @@
-<polymer-element name="ui-toc" attributes="urls">
+<polymer-element name="ui-toc" attributes="selector">
   <template>
-    <ul id="toc">
+    <link rel="stylesheet" type="text/css" href="./ui-toc.less">
+    <nav>
+    <dl id="toc">
       <template repeat="{{link in tocLinks}}">
-        <li data-source-node-name={{link.sourceNodeName}} data-selector-index={{link.selectorIndex}} data-source-node-hash={{link.sourceNodeHash}} on-click={{linkClick}}>{{link.textContent}}</li>
+        <dt class="{{link.style}}" on-click="{{linkClick}}" link="{{link.index}}">{{link.caption}}</dt>
+        <template if="{{link.notes}}">
+          <dd class="{{link.style}}">{{link.notes}}</dd>
+        </template>
       </template>
-    </ul>
+    </dl>
+  </nav>
 
   </template>
   <script src="./ui-toc.litcoffee"></script>

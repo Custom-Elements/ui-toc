@@ -1,40 +1,41 @@
 #ui-toc-layout
-Creates a header
+Create a table of contents outline for the containing document.
+
+Out of the box, this will outline headers, under the assumption that you will
+be using headers h1-h4 to create your document structure.
+
+You can include `title=` attributes on your outline elements to provide a
+bit more content/subtitle in the TOC.
+
+    _ = require 'lodash'
 
     Polymer 'ui-toc',
 
 ##Events
-Scroll to the referenced section
+Scroll to the referenced section.
 
       linkClick: (event) ->
-        hash = event.target.getAttribute('data-source-node-hash')
-        element = @querySelectorRoot.querySelector '.'+hash
-        boundingRect = element.getBoundingClientRect()
-        window.scrollTo 0, boundingRect.top
+        target = @tocLinks?[event.target.getAttribute('link')]?.element
+        target.scrollIntoView(true)
 
 ##Attributes and Change Handlers
+###selector
+Finds the elements, starting from document, to outline in the table of contents.
+
+      selectorChanged: ->
+        @updateTocLinks()
 
 ##Methods
 
       updateTocLinks: () ->
-        @tocLinks = []
-        elements = @querySelectorRoot.querySelectorAll @selectors
-        for element in elements
-
-          for selector, i in @selectors
-            selectorIndex = if selector is element.nodeName then i
-
-          tocLink =
-            sourceNodeHash: 'ui-toc-'+Math.random().toString().substr(2)
-            sourceNodeName: element.nodeName
-            selectorIndex: selectorIndex
-            textContent: element.textContent
-
-          element.classList.add tocLink.sourceNodeHash
-
-          @tocLinks.push tocLink
-
-
+        console.log 'updating'
+        elements = document.querySelectorAll @selector
+        @tocLinks = _.map elements, (element, i) ->
+          index: i
+          caption: element.textContent
+          notes: element.title
+          style: element.tagName.toLowerCase()
+          element: element
 
 ##Event Handlers
 
@@ -42,18 +43,14 @@ Scroll to the referenced section
 
       created: () ->
         @tocLinks = []
-        @selectors = ['h1', 'h2', 'h3']
-        @container = 'body'
+        @selector = "h1, h2, h3, h4"
 
-      ready: () ->
+When the document is updated, the TOC is rebuild automatically.
 
-        @querySelectorRoot = if @container then document.querySelector @container else document
-
-        @updateTocLinks @querySelectorRoot
-
-        # Add Mutation Observer for Page Updates
+      attached: () ->
         observer = new MutationObserver (mutations) =>
-          @updateTocLinks @querySelectorRoot
-        target = @querySelectorRoot
+          @updateTocLinks()
+        target = document
         config = { subtree: true, childList: true, characterData: true }
         observer.observe(target, config)
+        @updateTocLinks()

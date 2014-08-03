@@ -1,0 +1,26 @@
+@import "../node_modules/ui-styles/variables";
+@import "../node_modules/ui-styles/lists-typography";
+
+:host {
+  display: block;
+  dt {
+    cursor: pointer;
+  }
+  dt.h1, dd.h1 {
+    margin-left: 0.6em;
+  }
+  dt.h2, dd.h2 {
+    margin-left: 1.2em;
+  }
+  dt.h3, dd.h3 {
+    margin-left: 1.8em;
+  }
+  dt.h4, dd.h4 {
+    margin-left: 2.1em;
+  }
+  dt.h2, dt.h3, dt.h4 {
+    &:before {
+      content: '\22ef';
+    }
+  }
+}
