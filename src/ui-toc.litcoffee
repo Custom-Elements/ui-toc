@@ -12,11 +12,9 @@ bit more content/subtitle in the TOC.
     Polymer 'ui-toc',
 
 ##Events
-Scroll to the referenced section.
-
-      linkClick: (event) ->
-        target = @tocLinks?[event.target.getAttribute('link')]?.element
-        target.scrollIntoView(true)
+###tocjump
+Fired when a link is clicked, this makes it easier to respond differently
+when a link is clicked.
 
 ##Attributes and Change Handlers
 ###selector
@@ -28,7 +26,6 @@ Finds the elements, starting from document, to outline in the table of contents.
 ##Methods
 
       updateTocLinks: () ->
-        console.log 'updating'
         elements = document.querySelectorAll @selector
         @tocLinks = _.map elements, (element, i) ->
           index: i
@@ -38,6 +35,12 @@ Finds the elements, starting from document, to outline in the table of contents.
           element: element
 
 ##Event Handlers
+Scroll to the referenced section on a click.
+
+      linkClick: (event) ->
+        target = @tocLinks?[event.target.getAttribute('link')]?.element
+        target.scrollIntoView(true)
+        @fire 'tocjump', target
 
 ##Polymer Lifecycle
 
