@@ -4,12 +4,12 @@
   "dependencies": {
     "lodash": "^2.4.1",
     "polymer": "git://github.com/custom-elements/polymer#master",
-    "polymer-build": "",
+    "polymer-serve": "git://github.com/custom-elements/polymer-serve",
     "ui-fonts": "git://github.com/custom-elements/ui-fonts#master",
     "ui-styles": "git://github.com/custom-elements/ui-styles#master"
   },
   "license": "ISC",
   "scripts": {
-    "test": "polymer-build watch . src/ build/"
+    "test": "polymer-serve ."
   }
 }
