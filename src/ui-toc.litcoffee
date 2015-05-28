@@ -7,7 +7,6 @@ be using headers h1-h4 to create your document structure.
 You can include `title=` attributes on your outline elements to provide a
 bit more content/subtitle in the TOC.
 
-    _ = require 'lodash'
 
     Polymer 'ui-toc',
 
@@ -27,7 +26,7 @@ Finds the elements, starting from document, to outline in the table of contents.
 
       updateTocLinks: () ->
         elements = document.querySelectorAll @selector
-        @tocLinks = _.map elements, (element, i) ->
+        @tocLinks = elements.array().map (element, i) ->
           index: i
           caption: element.textContent
           notes: element.title
